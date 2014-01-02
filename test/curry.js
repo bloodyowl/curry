@@ -1,11 +1,12 @@
 var tape = require("tape")
-  , curry = require("../curry")
+  , curry = require("../")
 
-tape(function(test){
+tape("Curry", function(test){
   
   var curried = curry(add)
     , curriedLength = curry(addNoLimit, 4)
     , curriedThisValue = curry(getThisValue, null, {foo:"bar"})
+    , curriedCtor = curry(Ctor)
   
   function add(a,b,c,d){
     return a + b + c + d
@@ -25,6 +26,14 @@ tape(function(test){
     return this
   }
   
+  function Ctor(a,b){
+    this.a += a
+    this.a += b
+  }
+  
+  Ctor.prototype.a = 1
+
+  test.equal(new curriedCtor(2,3).a, 6, "Keeps prototype")
   test.equal(curriedThisValue(1).foo, "bar", "Passes thisValue")
   test.equal(curried(1)(2)(3)(4), 10, "Curry one param")
   test.equal(curried(1, 2)(3, 4), 10, "Curry with multiple")
