@@ -1,5 +1,7 @@
 # curry.js
 
+[![Build Status](https://travis-ci.org/bloodyowl/curry.png?branch=master)](https://travis-ci.org/bloodyowl/curry)
+
 simple currying script
 
 ```javascript
