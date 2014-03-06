@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/bloodyowl/curry.png?branch=master)](https://travis-ci.org/bloodyowl/curry)
 
+[![browser support](https://ci.testling.com/bloodyowl/curry.png)
+](https://ci.testling.com/bloodyowl/curry)
+
 simple currying script
 
 ```javascript
