@@ -28,7 +28,7 @@ addToOne(1)(2)(3) // -> 7
 
 ## api
 
-### curry(func[, number:length])
+### curry(func[, length])
 
 Returns a curried function that keeps returning a function until the sum of
 the passed arguments's length reaches `length` (if defined) or `fn.length`.
