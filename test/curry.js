@@ -1,45 +1,98 @@
 var tape = require("tape")
-  , curry = require("../")
+var curry = require("..")
 
-tape("Curry", function(test){
-  
-  var curried = curry(add)
-    , curriedLength = curry(addNoLimit, 4)
-    , curriedThisValue = curry(getThisValue, null, {foo:"bar"})
-    , curriedCtor = curry(Ctor)
-  
-  function add(a,b,c,d){
-    return a + b + c + d
-  }
-  
-  function addNoLimit(){
-    var args = arguments
-      , l = args.length
-      , r = 0
-    while(--l > -1) {
-      r += args[l]
-    }
-    return r
-  }
-  
-  function getThisValue(a){
-    return this
-  }
-  
-  function Ctor(a,b){
-    this.a += a
-    this.a += b
-  }
-  
-  Ctor.prototype.a = 1
+tape("curry", function(test){
 
-  test.equal(new curriedCtor(2,3).a, 6, "Keeps prototype")
-  test.equal(curriedThisValue(1).foo, "bar", "Passes thisValue")
-  test.equal(curried(1)(2)(3)(4), 10, "Curry one param")
-  test.equal(curried(1, 2)(3, 4), 10, "Curry with multiple")
-  test.equal(curried(1, 2, 3, 4), 10, "Curry with one call")
-  test.equal(curried(1, 2)(3, 4, 5), 10, "Curry with one extra param")
-  test.equal(curriedLength(1, 2)(3, 4), 10, "Curry with limit set manually")
+  function map(func, array) {
+    return array.map(func)
+  }
+
+  function square(number) {
+    return Math.pow(number, 2)
+  }
+
+  function squareRoot(number) {
+    return Math.sqrt(number)
+  }
+
+  var curriedMap = curry(map)
+  var curriedSquareMap = curriedMap(square)
+  var curriedSquareRootMap = curriedMap(squareRoot)
+
+  test.deepEqual(
+    curriedSquareMap([1, 2, 3, 4]),
+    [1, 4, 9, 16]
+  )
+
+  test.deepEqual(
+    curriedSquareRootMap([1, 4, 9, 16]),
+    [1, 2, 3, 4]
+  )
+
   test.end()
 
+})
+
+tape("curry #2", function(test){
+
+  function add(a, b, c, d, e) {
+    return a + b + c + d + e
+  }
+
+  var curriedAdd = curry(add)
+
+  test.equal(
+    curriedAdd(1, 2, 3, 4, 5),
+    15
+  )
+
+  test.equal(
+    curriedAdd(1, 2, 3, 4)(5),
+    15
+  )
+
+  test.equal(
+    curriedAdd(1, 2, 3)(4)(5),
+    15
+  )
+
+  test.equal(
+    curriedAdd(1, 2)(3)(4)(5),
+    15
+  )
+
+  test.equal(
+    curriedAdd(1)(2)(3)(4)(5),
+    15
+  )
+
+  test.equal(
+    curriedAdd(1)(2)(3, 4)(5),
+    15
+  )
+
+  test.end()
+})
+
+
+tape("custom length", function(test){
+  function add(a, b) {
+   return Array.prototype.reduce.call(arguments, function(acc, item) {
+     return acc + item
+   }, 0)
+  }
+
+  var curriedAdd = curry(add, 5)
+
+  test.equal(
+    curriedAdd(1)(2)(3)(4)(5),
+    15
+  )
+
+  test.equal(
+    curriedAdd(1, 2)(3, 4, 5),
+    15
+  )
+
+  test.end()
 })
