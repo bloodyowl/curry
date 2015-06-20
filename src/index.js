@@ -1,8 +1,7 @@
 function createCurried(func, length, currentArgs){
 
   function curried(...args) {
-
-    var concatenatedArgs = [
+    const concatenatedArgs = [
       ...currentArgs,
       ...args,
     ]
