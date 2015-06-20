@@ -1,13 +1,11 @@
-var nativePush = [].push
-
 function createCurried(func, length, currentArgs){
 
-  function curried() {
-    var args = arguments
+  function curried(...args) {
 
-    var concatenatedArgs = []
-    nativePush.apply(concatenatedArgs, currentArgs)
-    nativePush.apply(concatenatedArgs, args)
+    var concatenatedArgs = [
+      ...currentArgs,
+      ...args,
+    ]
 
     if(concatenatedArgs.length >= length) {
       return func.apply(this, concatenatedArgs)
@@ -30,4 +28,4 @@ function curry(func, length) {
   return createCurried(func, length, [])
 }
 
-module.exports = curry
+export default curry
